@@ -1,0 +1,3 @@
+# Python - ignore byte code files
+*.pyc
+secret.py
