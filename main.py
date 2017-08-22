@@ -1,51 +1,38 @@
-# An experimental Discord Bot
-# Don't get your hopes up.  It will probably suck.
+# Example from discord.py documentation
 
-import socket
+import discord
+import asyncio
 import secret
 
-# imaginary values
-HOST = '127.0.0.1'
-PORT = 32457
-apiSource = "https://discordapp.com/api"
-# # bytes received at a time from the server
-BUFFER_SIZE = 1024
-MESSAGE = "Test!"
-secret = secret.botToken
+client = discord.Client()
 
-# Important URL's
-# OAuth2 Base authorization URL
-authorizeURL = "https://discordapp.com/api/oauth2/authorize"
-# OAuth2 Token URL
-tokenURL = "https://discordapp.com/api/oauth2/token"
-# OAuth2 Revocation URL
-revokeURL = "https://discordapp.com/api/oauth2/token/revoke"
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
 
+@client.event
+async def on_message(message):
+	# Check contents of message
+	if message.content.startswith('!test'):
+		await client.send_message(message.channel, 'Working!')
 
-# If use a token, need something like:
-# Authorization: TOKEN_TYPE TOKEN in the http header
-# User-Agent: DiscordBot ($url, $versionNumber)
+	'''
+	# From documentation
+    if message.content.startswith('!test'):
+        counter = 0
+        tmp = await client.send_message(message.channel, 'Calculating messages...')
+        async for log in client.logs_from(message.channel, limit=100):
+            if log.author == message.author:
+                counter += 1
 
+        await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+    elif message.content.startswith('!sleep'):
+        await asyncio.sleep(5)
+        await client.send_message(message.channel, 'Done sleeping')
+    '''
 
-s = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
-# Sends the string as bytes
-s.send(b'Test!')
-data = s.recv(BUFFER_SIZE)
-s.close()
-
-print "Received data: ", data
-
-
-# Get gateway - cache and only retrieve if cached version fails
-def getGateway ():
-	# expected response format:
-	# {
-	#	"url": "wss://gateway.discord.gg/"
-	# }
-
-# Heartbeat - op1 should be sent every x milliseconds
-heartbeat = '{"op": 1,"d": 251}'
-
-# References:
-# https://pythonspot.com/en/python-network-sockets-programming-tutorial/
+# This line should be at the very end of the script.
+client.run('secret.token')
