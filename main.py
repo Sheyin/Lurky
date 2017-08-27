@@ -1,8 +1,9 @@
-# Example from discord.py documentation
+# Adapted from discord.py documentation example.
 
 import discord
 import asyncio
 import secret
+import users
 
 client = discord.Client()
 
@@ -19,7 +20,52 @@ async def on_message(message):
 	if message.content.startswith('!test'):
 		await client.send_message(message.channel, 'Working!')
 
-	'''
+	if message.content.startswith('!tryid'):
+		await client.send_message(message.channel, 'Testing <@' + str(message.author.id) + '>')
+
+	if message.content.startswith('!slap'):
+		# Get content after !slap command
+		appendThis = str(message.content).split(' ', 1)[1]
+
+		if "lurky" in appendThis.lower() or "sheyin" in appendThis.lower():
+			await client.send_message(message.channel, "Meanie!")
+		else:
+			await client.send_message(message.channel, '/me slaps ' + appendThis + ".")
+
+	# Specifically to annoy Brandon
+	#elif "83399943506624512" in message.author.id:
+		# await client.send_message(message.channel, 'Meanie!')
+		
+	# So it doesn't respond to itself
+	elif message.author.id != message.server.me.id:
+		# Logging to get proper ID's
+		filename = "log.txt"
+		file = open(filename, "a")
+		file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + "\n")
+		file.write("Message: " + str(message.content) + "\n")
+		file.close()
+
+		print("Author: " + str(message.author) + " ID:" + str(message.author.id))
+		print("Message: " + message.content)
+		for greeting in ['hi', 'hello', 'hey', 'sup', 'helo', 'ola', "/wave", "morni", "eveni"]:
+			if greeting in message.content[:5]:
+				await client.send_message(message.channel, 'Hello <@' + str(message.author.id) + ">! :grinning:")
+
+		if "fish" in message.content[:10].lower():
+			await client.send_message(message.channel, '/me digs out the fish.')
+
+		if "slap" in message.content[:10].lower():
+			await client.send_message(message.channel, 'Meanie!')
+		
+
+	else:
+		# Not needed - probably only something Lurky says.
+		print("Lurky says: " + message.content)
+
+# This line is necessary and should be at the very end of the script.
+client.run(secret.token)
+
+'''
 	# From documentation
     if message.content.startswith('!test'):
         counter = 0
@@ -33,6 +79,3 @@ async def on_message(message):
         await asyncio.sleep(5)
         await client.send_message(message.channel, 'Done sleeping')
     '''
-
-# This line should be at the very end of the script.
-client.run('secret.token')
