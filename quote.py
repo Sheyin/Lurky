@@ -17,15 +17,8 @@ def recordQuote(author, text):
 	splitContent = text[firstDash + 3:].splitlines()
 	quotedDate = splitContent[0]
 
-	# Discord automatically adds in "Yesterday" and "Today", "Last Tuesday", etc. which need to be converted to a date
-	# Older messages no longer have a timestamp (only date in MM/DD/YYYY format)
-	today = datetime.datetime.today()
-	print("Today's date: " + str(today.strftime('%Y-%m-%d')))
-	year = month = today.strftime('%Y')
-	month = today.strftime('%m')
-	day = today.strftime('%d')
-	print("Month: " + month + " Day: " + day + " Year: " + year)
-	print("Yesterday: " + month + " " + int(day)-1 + " " + year)
+	# Tidy date into a standard format
+	quotedDate = dateCalculation(quotedDate)
 
 	# Get quotation
 	quotedText = splitContent[1]
@@ -50,4 +43,32 @@ def recordQuote(author, text):
 	#file.write("Message: " + str(message.content) + "\n")
 	#file.close()
 
+	return
+
+
+# Discord automatically adds in "Yesterday" and "Today", "Last Tuesday", etc. which need to be converted to a date
+# Older messages no longer have a timestamp (only date in MM/DD/YYYY format)
+def dateCalculation(quotedDate):
+	today = datetime.datetime.today()
+	print("Today's date: " + str(today.strftime('%Y-%m-%d')))
+	year = month = today.strftime('%Y')
+	month = today.strftime('%B')
+	day = today.strftime('%d')
+	print("Month: " + month + " Day: " + day + " Year: " + year)
+	print("Yesterday: " + month + " " + int(day)-1 + " " + year)
+
+	if "Yesterday" in quotedDate:
+		# Return day - 1
+		pass
+
+	# Automatically converts up to a week to "Last Tuesday", etc.
+	elif "Last" in quotedDate:
+		# Figure out today's day then calculate how long ago it was
+		week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+		for index, weekday in enumerate(week, start = 0):
+			if weekday in quotedDate:
+				weekIndex = index
+		print("weekIndex: " + weekIndex + " day: " + week[weekIndex])
+
+	
 	return
