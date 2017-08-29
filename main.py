@@ -4,6 +4,7 @@ import discord
 import asyncio
 import secret
 import users
+import quote
 
 client = discord.Client()
 
@@ -17,6 +18,9 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	# Check contents of message
+	if message.content.startswith('!quote '):
+		print ("Called quoteRecord()")
+		quote.recordQuote(str(message.author), str(message.content)[7:])
 	if message.content.startswith('!test'):
 		await client.send_message(message.channel, 'Working!')
 
@@ -32,9 +36,8 @@ async def on_message(message):
 		else:
 			await client.send_message(message.channel, '/me slaps ' + appendThis + ".")
 
-	# Specifically to annoy Brandon
-	#elif "83399943506624512" in message.author.id:
-		# await client.send_message(message.channel, 'Meanie!')
+	if message.content == ('Lurky?'):
+		await client.send_message(message.channel, 'Yes?')
 		
 	# So it doesn't respond to itself
 	elif message.author.id != message.server.me.id:
