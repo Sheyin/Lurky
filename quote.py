@@ -30,27 +30,35 @@ def recordQuote(author, text):
 	print("Quoted author: " + quotedName)
 	print("Quoted date: " + quotedDate)
 	print("Quoted text: " + quotedText)
-	print('\n')
+	print('End quoteRecord() \n')
 
 	''' Example JSON
 	{
-	"date": "2017-08-30",
-	"name": "Lurky",
-	"text": "This is a quote.",
-	"author": "Me"
+	"01": {
+		"date": "2017-08-30",
+		"name": "Lurky",
+		"text": "This is a quote.",
+		"author": "Me"
 	}
+}
 	'''
 
-	#json.JSONEncoder()
+	# Need another config file to count quote number, stats, etc
+	quoteNumber = 0
 
+	entry = json.JSONEncoder().encode({quoteNumber: {"date": quotedDate, "name": quotedName, "text": quotedText, "author": author}})
+
+	print(str(entry))
 	# Prepare file for writing
-	#filename = "quote.txt"
-	#file = open(filename, "a")
-
+	filename = "quote.txt"
+	file = open(filename, "a")
+	file.write(entry + "\n")
+	file.close()
 	# Adding a delimiter for text file storage, but might skip this if using a proper database
-	delimiter = "/////"
+	#delimiter = "/////"
 	# Format: [date]/////[quoted author]/////[quote]/////[person who registered quote]
-	stringToWrite = quotedDate + delimiter + quotedName + delimiter + quotedText + delimiter + author
+	#stringToWrite = quotedDate + delimiter + quotedName + delimiter + quotedText + delimiter + author
+
 
 
 	
