@@ -21,6 +21,11 @@ async def on_message(message):
 	if message.content.startswith('!quote '):
 		print ("Called quoteRecord()")
 		quote.recordQuote(str(message.author), str(message.content)[7:])
+	if message.content.startswith('!getquote '):
+		print ("Retrieving quote")
+		quoteDict = quote.retrieveQuote()
+		await client.send_message(message.channel, 'Quote: "' + quoteDict['text'] + ' - ' + quoteDict['name'] + ' (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
+
 	if message.content.startswith('!test'):
 		await client.send_message(message.channel, 'Working!')
 
@@ -36,7 +41,7 @@ async def on_message(message):
 		else:
 			await client.send_message(message.channel, '/me slaps ' + appendThis + ".")
 
-	if message.content == ('Lurky?'):
+	if message.content.startswith('Lurky?'):
 		await client.send_message(message.channel, 'Yes?')
 		
 	# So it doesn't respond to itself

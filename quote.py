@@ -68,6 +68,23 @@ def recordQuote(author, text):
 
 	return
 
+# Need a helper function to identify which quote, or else maybe default to a random?
+def retrieveQuote():
+	filename = "quote.txt"
+	file = open(filename, "r")
+	document = file.read()
+	print(document)
+
+	# Insert some parsing, identifying which quote, etc. here
+
+	quoteDict = json.loads(document)
+	#print(quoteDict["0"])
+	print(quoteDict)
+	lineitem = (quoteDict["0"])
+	print(lineitem)
+	print(lineitem["date"])
+	# Returns a dictionary of the specific quote with keys [date, name, text, author]
+	return lineitem
 
 # Discord automatically adds in "Yesterday" and "Today", "Last Tuesday", etc. which need to be converted to a date
 # Older messages no longer have a timestamp (only date in MM/DD/YYYY format)
@@ -107,4 +124,8 @@ def dateCalculation(quotedDate):
 	return
 
 if __name__ == "__main__":
-	recordQuote("Me", "Lurky - Yesterday at 1:10PM\nThis is a test quote!")
+	#recordQuote("Me", "Lurky - Yesterday at 1:10PM\nThis is a test quote!")
+	retrieveQuote()
+
+
+
