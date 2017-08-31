@@ -6,7 +6,6 @@ import random
 import users
 
 filename = "quote.txt"
-settingsFileName = "quoteSettings.txt"
 
 # Called by !quote <quotation>, expects a string (quotation) and writes it to file.
 def recordQuote(author, text):
@@ -28,22 +27,6 @@ def recordQuote(author, text):
 
 	# Identify correct quotedName if a nick was used
 	quotedName = users.findUserID(quotedName)
-
-	# Retrieve settings
-	'''
-	numQuotes = 0
-	try:
-		settingsFile = open(settingsFileName, "r")
-		settingsJSON = settingsFile.read()
-		settingsFile.close()
-		settings = json.loads(settingsJSON)
-		if not settings["numQuotes"]:
-			settings["numQuotes"] = 0
-		numQuotes = settings["numQuotes"]
-	# No settings file, or blank settings file
-	except (IOError, json.decoder.JSONDecodeError) as error:
-		numQuotes = 0
-	'''
 
 	# Need another config file to count quote number, stats, etc
 	#numQuotes += 1
@@ -68,12 +51,6 @@ def recordQuote(author, text):
 		
 		with open(filename, "w") as f:
 			json.dump(newEntry, f)
-
-	# increment number of quotes in settings file
-	settingsJSON2 = json.JSONEncoder().encode({"numQuotes": numQuotes})
-	settingsFile = open(settingsFileName, "w")
-	settingsFile.write(settingsJSON2 + "\n")
-	settingsFile.close
 
 	return
 
@@ -165,7 +142,7 @@ def dateCalculation(quotedDate):
 
 if __name__ == "__main__":
 	#recordQuote("Me", "Lurky - Yesterday at 1:10PM\nThis is a test quote!")
-	retrieveQuote()
+	pass
 
 
 
