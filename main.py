@@ -21,10 +21,15 @@ async def on_message(message):
 	if message.content.startswith('!quote '):
 		print ("Called quoteRecord()")
 		quote.recordQuote(str(message.author), str(message.content)[7:])
-	if message.content.startswith('!getquote '):
-		print ("Retrieving quote")
-		quoteDict = quote.retrieveQuote()
-		await client.send_message(message.channel, 'Quote: "' + quoteDict['text'] + ' - ' + quoteDict['name'] + ' (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
+		await client.send_message(message.channel, 'Quote has been recorded.')
+	if message.content.startswith('!getquote'):		
+		quoteDict, success = quote.retrieveQuote(str(message.content), str(message.author))
+		if quoteDict == "empty":
+			await client.send_message(message.channel, 'Sorry, there are no quotes recorded.  Add some now using !getquote (userID/date/quote as copy-pasted from Discord)!')
+		elif not success:
+			await client.send_message(message.channel, 'No quotes by that name found.  Here is a random quote: "' + quoteDict['text'] + ' -- ' + quoteDict['name'] + ', (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
+		else:
+			await client.send_message(message.channel, 'Quote: "' + quoteDict['text'] + ' -- ' + quoteDict['name'] + ', (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
 
 	if message.content.startswith('!test'):
 		await client.send_message(message.channel, 'Working!')
@@ -53,8 +58,10 @@ async def on_message(message):
 		file.write("Message: " + str(message.content) + "\n")
 		file.close()
 
+		print("Debug message received ---")
 		print("Author: " + str(message.author) + " ID:" + str(message.author.id))
 		print("Message: " + message.content)
+		print("----")
 		for greeting in ['hi', 'hello', 'hey', 'sup', 'helo', 'ola', "/wave", "morni", "eveni"]:
 			if greeting in message.content[:5]:
 				await client.send_message(message.channel, 'Hello <@' + str(message.author.id) + ">! :grinning:")
