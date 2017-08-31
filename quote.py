@@ -32,11 +32,26 @@ def recordQuote(author, text):
 	print("Quoted text: " + quotedText)
 	print('\n')
 
+	''' Example JSON
+	{
+	"date": "2017-08-30",
+	"name": "Lurky",
+	"text": "This is a quote.",
+	"author": "Me"
+	}
+	'''
+
 	#json.JSONEncoder()
 
 	# Prepare file for writing
 	#filename = "quote.txt"
 	#file = open(filename, "a")
+
+	# Adding a delimiter for text file storage, but might skip this if using a proper database
+	delimiter = "/////"
+	# Format: [date]/////[quoted author]/////[quote]/////[person who registered quote]
+	stringToWrite = quotedDate + delimiter + quotedName + delimiter + quotedText + delimiter + author
+
 
 	
 	#file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + "\n")
@@ -84,6 +99,4 @@ def dateCalculation(quotedDate):
 	return
 
 if __name__ == "__main__":
-	print(dateCalculation("Yesterday at 4:50 PM"))
-	print(dateCalculation("Last Friday at 5:50 PM"))
-	print(dateCalculation("Last Wednesday at 5:50 PM"))
+	recordQuote("Me", "Lurky - Yesterday at 1:10PM\nThis is a test quote!")
