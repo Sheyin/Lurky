@@ -30,6 +30,7 @@ def recordQuote(author, text):
 	quotedName = users.findUserID(quotedName)
 
 	# Retrieve settings
+	'''
 	numQuotes = 0
 	try:
 		settingsFile = open(settingsFileName, "r")
@@ -42,15 +43,17 @@ def recordQuote(author, text):
 	# No settings file, or blank settings file
 	except (IOError, json.decoder.JSONDecodeError) as error:
 		numQuotes = 0
+	'''
 
 	# Need another config file to count quote number, stats, etc
-	numQuotes += 1
+	#numQuotes += 1
 	entry = {"date": quotedDate, "name": quotedName, "text": quotedText, "author": author}
 
 	# Retrieve entire list of quotes to update the dictionary
 	try:
 		with open(filename, "r") as f:
 			quotesDict = json.load(f)
+		numQuotes = len(quotesDict)
 		# Update dictionary
 		quotesDict[str(numQuotes)] = entry
 		# Write quote dictionary back to quotes.txt
@@ -58,7 +61,6 @@ def recordQuote(author, text):
 			json.dump(quotesDict, f)
 	# quotes filename does not exist or has no quotes
 	except (IOError, json.decoder.JSONDecodeError) as error:
-		#newEntry = json.JSONEncoder().encode({numQuotes: {"date": quotedDate, "name": quotedName, "text": quotedText, "author": author}})
 		# Reset quotesettings just to be on safe side
 		numQuotes = 1
 		# Write quote dictionary to quotes.txt
