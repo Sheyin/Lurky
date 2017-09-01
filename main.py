@@ -71,7 +71,12 @@ async def on_message(message):
 
 		if "slap" in message.content[:10].lower():
 			await client.send_message(message.channel, 'Meanie!')
-		
+
+		if "what is love" in message.content.lower():
+			await client.send_message(message.channel, "Baby don't hurt me... don't hurt me... no more...")
+
+		if "give you up" in message.content.lower() or "let you down" in message.content.lower() or "!smalltest" in message.content.lower():
+			await client.send_message(message.channel, "Never gonna:\n```-give you up\n-let you down\n-run around\n-desert you\n```")
 
 	else:
 		# Not needed - probably only something Lurky says.
