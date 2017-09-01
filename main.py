@@ -5,6 +5,7 @@ import asyncio
 import secret
 import users
 import quote
+from chatmisc import *
 
 client = discord.Client()
 
@@ -62,22 +63,11 @@ async def on_message(message):
 		print("Author: " + str(message.author) + " ID:" + str(message.author.id))
 		print("Message: " + message.content)
 		print("----")
-		for greeting in ['hi', 'hello', 'hey', 'sup', 'helo', 'ola', "/wave", "morni", "eveni"]:
-			if greeting in message.content[:5]:
-				await client.send_message(message.channel, 'Hello <@' + str(message.author.id) + ">! :grinning:")
 
-		if "fish" in message.content[:10].lower():
-			await client.send_message(message.channel, '/me digs out the fish.')
-
-		if "slap" in message.content[:10].lower():
-			await client.send_message(message.channel, 'Meanie!')
-
-		if "what is love" in message.content.lower():
-			await client.send_message(message.channel, "Baby don't hurt me... don't hurt me... no more...")
-
-		if "give you up" in message.content.lower() or "let you down" in message.content.lower() or "!smalltest" in message.content.lower():
-			await client.send_message(message.channel, "Never gonna:\n```-give you up\n-let you down\n-run around\n-desert you\n```")
-
+		response = quickMessageResponse(message.content.lower(), str(message.author.id))
+		if response:
+			await client.send_message(message.channel, response)
+		
 	else:
 		# Not needed - probably only something Lurky says.
 		print("Lurky says: " + message.content)
@@ -86,7 +76,7 @@ async def on_message(message):
 client.run(secret.token)
 
 '''
-	# From documentation
+	# From discord.py's documentation
     if message.content.startswith('!test'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
