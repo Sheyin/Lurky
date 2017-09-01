@@ -6,6 +6,7 @@ import secret
 import users
 import quote
 from chatmisc import *
+from datetime import date
 
 client = discord.Client()
 
@@ -52,18 +53,11 @@ async def on_message(message):
 		
 	# So it doesn't respond to itself
 	elif message.author.id != message.server.me.id:
-		# Logging to get proper ID's
-		filename = "log.txt"
-		file = open(filename, "a")
-		file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + "\n")
-		file.write("Message: " + str(message.content) + "\n")
-		file.close()
-
-		print("Debug message received ---")
-		print("Author: " + str(message.author) + " ID:" + str(message.author.id))
-		print("Message: " + message.content)
-		print("----")
-
+		# Logging just because
+		with open("log.txt", "a") as f:
+			file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
+			file.write("Message: " + str(message.content) + "\n")
+	
 		response = quickMessageResponse(message.content.lower(), str(message.author.id))
 		if response:
 			await client.send_message(message.channel, response)
