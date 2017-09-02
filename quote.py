@@ -51,6 +51,8 @@ def recordQuote(author, text):
 		
 		with open(filename, "w") as f:
 			json.dump(newEntry, f)
+	# Record quote target stat
+	utils.updateStats("!quote_target", userID)
 
 	return
 

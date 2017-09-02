@@ -5,10 +5,13 @@ import asyncio
 import secret
 import users
 import quote
-from chatmisc import *
-from datetime import date
+import chatmisc
+import datetime
+import utils
 
 client = discord.Client()
+# This checks for and creates a stats file if it does not exist
+utils.checkInitialization(utils.statsfile)
 
 @client.event
 async def on_ready():
@@ -21,11 +24,12 @@ async def on_ready():
 async def on_message(message):
 	# Check contents of message
 	if message.content.startswith('!quote '):
-		print ("Called quoteRecord()")
 		quote.recordQuote(str(message.author), str(message.content)[7:])
+		utils.updateStats("!quote", message.author)
 		await client.send_message(message.channel, 'Quote has been recorded.')
 	if message.content.startswith('!getquote'):		
 		quoteDict, success = quote.retrieveQuote(str(message.content), str(message.author))
+		utils.updateStats("!getquote", message.author)
 		if quoteDict == "empty":
 			await client.send_message(message.channel, 'Sorry, there are no quotes recorded.  Add some now using !getquote (userID/date/quote as copy-pasted from Discord)!')
 		elif not success:
@@ -33,20 +37,26 @@ async def on_message(message):
 		else:
 			await client.send_message(message.channel, 'Quote: "' + quoteDict['text'] + ' -- ' + quoteDict['name'] + ', (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
 
-	if message.content.startswith('!test'):
+	if message.content.startswith('!test') or message.content.startswith('test'):
+		utils.updateStats("!test", message.author)
 		await client.send_message(message.channel, 'Working!')
 
 	if message.content.startswith('!tryid'):
 		await client.send_message(message.channel, 'Testing <@' + str(message.author.id) + '>')
 
 	if message.content.startswith('!slap'):
-		# Get content after !slap command
-		appendThis = str(message.content).split(' ', 1)[1]
+		response = chatmisc.slap(message.content)
+		utils.updateStats("!slap", message.author)
+		await client.send_message(message.channel, response)
 
-		if "lurky" in appendThis.lower() or "sheyin" in appendThis.lower():
-			await client.send_message(message.channel, "Meanie!")
-		else:
-			await client.send_message(message.channel, '/me slaps ' + appendThis + ".")
+	if message.content.startswith('!fish'):
+		response = chatmisc.fish(message.content)
+		utils.updateStats("!fish", message.author)
+		await client.send_message(message.channel, response)
+
+	if message.content.startswith('!stats'):
+		response = utils.getStats(message.content.lower(), message.author)
+		await client.send_message(message.channel, response)
 
 	if message.content.startswith('Lurky?'):
 		await client.send_message(message.channel, 'Yes?')
@@ -54,11 +64,16 @@ async def on_message(message):
 	# So it doesn't respond to itself
 	elif message.author.id != message.server.me.id:
 		# Logging just because
-		with open("log.txt", "a") as f:
-			file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
-			file.write("Message: " + str(message.content) + "\n")
+		try:
+			with open("log.txt", "a") as file:
+				file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
+				file.write("Message: " + str(message.content) + "\n")
+		except UnicodeEncodeError:
+			with open("log.txt", "a") as file:
+				file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
+				file.write("Message: " + "Some emote was used that produces a unicode error." + "\n")
 	
-		response = quickMessageResponse(message.content.lower(), str(message.author.id))
+		response = chatmisc.quickMessageResponse(message.content.lower(), str(message.author.id))
 		if response:
 			await client.send_message(message.channel, response)
 		
