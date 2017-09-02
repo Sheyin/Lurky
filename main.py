@@ -11,7 +11,7 @@ import utils
 
 client = discord.Client()
 # This checks for and creates a stats file if it does not exist
-utils.checkInitialization(utils.statsfile)
+utils.checkInitialization()
 
 @client.event
 async def on_ready():
