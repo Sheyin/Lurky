@@ -4,7 +4,7 @@ import json
 import secret
 import users
 
-stats = ["!fish", "!slap", "!test", "!quote", "!getquote", "!fish_target", "!slap_target", "!quote_target"]
+statsList = ["!fish", "!slap", "!test", "!quote", "!getquote", "!fish_target", "!slap_target", "!quote_target"]
 statsfile = "stats.txt"	# note that this is doubly declared in chatsmisc.py - should standardize into a single variable
 
 ''' Sample valid json:
@@ -29,12 +29,10 @@ def updateStats(stat, userID):
 		with open(statsfile, "r") as f:
 			statsDict = json.load(f)
 		# find stat in question and get value
-			print(statsDict[stat])
 			statValue = statsDict[userID][stat]
 			statValue += 1
-			print(statValue)
 		# Update dictionary
-		statsDict[stat] = statValue
+		statsDict[userID][stat] = statValue
 		# Write stats dictionary back to statsfile
 		with open(statsfile, "w") as f:
 			json.dump(statsDict, f)
@@ -53,7 +51,8 @@ def checkInitialization():
 			statsDict = json.load(f)
 		# Check and make sure all the stats have an entry
 			for user in statsDict:
-				for _ in stats:
+				print("user: " + str(user) + " stats: " + str(statsList))
+				for _ in statsList:
 					if _ not in statsDict[user]:
 						print("Error: unable to find " + _ + " for user " + user)
 
@@ -143,7 +142,7 @@ def getStats(message, author):
 	else:
 		response += "```"
 		addition = ""
-		for _ in stats:
+		for _ in statsList:
 			data = requestedData[targetParameter][_]
 			addition = _ + ": " + str(data) + " times.\n"
 			response += addition
@@ -152,7 +151,7 @@ def getStats(message, author):
 
 def checkIfStat(text):
 	#print("checkIfStat: " + text)
-	for _ in stats:
+	for _ in statsList:
 		if _ == text:
 			#print("Stat found!")
 			return _

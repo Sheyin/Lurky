@@ -13,6 +13,10 @@ client = discord.Client()
 # This checks for and creates a stats file if it does not exist
 utils.checkInitialization()
 
+# Needed for voice
+if not discord.opus.is_loaded():
+    discord.opus.load_opus('opus')
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -29,7 +33,7 @@ async def on_message(message):
 		await client.send_message(message.channel, 'Quote has been recorded.')
 	if message.content.startswith('!getquote'):		
 		quoteDict, success = quote.retrieveQuote(str(message.content), str(message.author))
-		utils.updateStats("!getquote", message.author)
+		utils.updateStats("!getquote", str(message.author))
 		if quoteDict == "empty":
 			await client.send_message(message.channel, 'Sorry, there are no quotes recorded.  Add some now using !getquote (userID/date/quote as copy-pasted from Discord)!')
 		elif not success:
@@ -45,17 +49,21 @@ async def on_message(message):
 		await client.send_message(message.channel, 'Testing <@' + str(message.author.id) + '>')
 
 	if message.content.startswith('!slap'):
-		response = chatmisc.slap(message.content)
+		response = chatmisc.slap(message.content, str(message.author))
 		utils.updateStats("!slap", message.author)
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!fish'):
-		response = chatmisc.fish(message.content)
+		response = chatmisc.fish(message.content, str(message.author))
 		utils.updateStats("!fish", message.author)
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!stats'):
-		response = utils.getStats(message.content.lower(), message.author)
+		response = utils.getStats(message.content.lower(), str(message.author))
+		await client.send_message(message.channel, response)
+
+	if message.content.startswith('!help'):
+		response = chatmisc.help(message.content.lower())
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('Lurky?'):

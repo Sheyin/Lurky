@@ -151,14 +151,19 @@ def createTimeResponse(isGreeting, authorID):
 
 
 # Implementation of chibi's old !fish command.  author will be used for tracking usage.
-def fish(message):
+def fish(message, author):
 	# Get content after !fish command
-	appendThis = message.split(' ', 1)[1]
+	splitText = message.split(' ')
+	if len(splitText) > 1:
+		appendThis = splitText[1]
+	# No parameter (target) provided
+	else:
+		utils.updateStats("!fish_target", author)
+		message = "Uh, okay.  /me slaps " + author + " with one fish.\n/me slaps " + author + " with two fish.\n/me slaps " + author + " with a red fish.\n/me slaps " + author + " with a blue fish."
 
 	# get userID
 	userID, alias = users.findUserIDAndAlias(appendThis.lower())
 	appendThisFragments = appendThis.split(alias)
-	print(appendThisFragments)
 
 	if users.findUserAlias(userID) in ["sheyin", "lurky"]:
 		utils.updateStats("!fish_target", userID)
@@ -173,9 +178,15 @@ def fish(message):
 
 
 # Implementation of chibi's old !slap command.  author will be used for tracking usage.
-def slap(message):
+def slap(message, author):
 	# Get content after !slap command
-	appendThis = message.split(' ', 1)[1]
+	splitText = message.split(' ')
+	if len(splitText) > 1:
+		appendThis = splitText[1]
+	# No parameter (target) provided
+	else:
+		utils.updateStats("!fish_target", author)
+		message = "Uh, okay.  /me slaps <@" + author + ">."
 
 	# get userID
 	userID, alias = users.findUserIDAndAlias(appendThis.lower())
@@ -195,6 +206,28 @@ def slap(message):
 		message = "/me slaps " + appendThis
 
 	return message
+
+
+# Print list of available commands in discord
+def help(text):
+	splitText = text.split(' ', 1)
+	if len(splitText) == 1:
+		return "The commands I have available are !quote, !getquote, !slap, !fish, !test, !stats.  You can use !help <command> to learn more.  I also have a few hidden features."
+	elif splitText[1] == "!quote":
+		return "Record a quote to be recalled later on.  Usage: !quote (copy-and-paste text from discord, including speaker and date, just as formatted by Discord itself)."
+	elif splitText[1] == "!getquote":
+		return "Bring up a random quote that was recorded by someone.  Usage: !getquote (optional parameter follows - ex. a name."
+	elif splitText[1] == "!slap":
+		return "Only mean people use this.  Use it to slap someone.  Usage: !slap (target name)."
+	elif splitText[1] == "!fish":
+		return "Slap someone around with a fish.  Usage: !slap (target name)."
+	elif splitText[1] == "!test":
+		return "Sometimes you just want to know if you've dc'ed or something.  Usage: !test (or just test)."
+	elif splitText[1] == "!stats":
+		return "Bring up stats about usage of various commands.  Usage: !stats (command) (user) for a specific stat, or just !stats (user) for all of that user's stats."
+	else:
+		return "Sorry, I don't know anything about " + splitText[1] + "!"
+
 
 
 	
