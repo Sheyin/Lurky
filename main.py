@@ -83,9 +83,13 @@ async def on_message(message):
 	
 		if message.content.startswith('surprise'):
 			if message.author.voice_channel:
+				# Try to join if not already in a voice channel.  This is probably not the best handling.
 				try:
 					voice = await client.join_voice_channel(message.author.voice_channel)
-					player = await voice.create_ytdl_player('https://youtu.be/dQw4w9WgXcQ')
+				except:
+					pass
+				try:
+					player = voice.create_ffmpeg_player('sound/GiveYouUpIntro.mp3')
 					player.start()
 					print("Successful?")
 				except:
@@ -96,6 +100,7 @@ async def on_message(message):
 			else:
 				await client.send_message(message.channel, 'No surprise for you!')
 
+		# This seems to throw errors on a regular basis.  Returns "video does not exist"
 		elif message.content.startswith('!play '):
 			# Parse url first and see if it is valid
 			splitString = message.content.lower().split(' ')
@@ -105,21 +110,22 @@ async def on_message(message):
 				if splitString[1][0:4] == 'http':
 					url = splitString[1]
 					if message.author.voice_channel:
-						#try:
-						voice = await client.join_voice_channel(message.author.voice_channel)
-						# Test - from https://github.com/Rapptz/discord.py/issues/315
-						beforeArgs = "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
-						#player = await voice.create_ytdl_player(url)
-						player = await voice.create_ytdl_player(url, ytdl_options="--ignore-errors", before_options=beforeArgs)
-						player.start()
-						print("Successful?")
-						'''
+						try:
+							# Probably want to add a case for "if already joined voice channel" or else throws error
+							voice = await client.join_voice_channel(message.author.voice_channel)
+							# Test - from https://github.com/Rapptz/discord.py/issues/315
+							beforeArgs = "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+							#player = await voice.create_ytdl_player(url)
+							player = await voice.create_ytdl_player(url, ytdl_options="--ignore-errors", before_options=beforeArgs)
+							player.start()
+							print("Successful?")
+
 						except:
 							print("Something failed during voice test")
 							print("Is Opus loaded?: " + str(discord.opus.is_loaded()))
 							print("Url tried to play: " + url)
 							pass
-						'''
+
 					else:
 						await client.send_message(message.channel, 'No surprise for you!')
 				else:
