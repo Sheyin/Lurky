@@ -51,7 +51,6 @@ def checkInitialization():
 			statsDict = json.load(f)
 		# Check and make sure all the stats have an entry
 			for user in statsDict:
-				print("user: " + str(user) + " stats: " + str(statsList))
 				for _ in statsList:
 					if _ not in statsDict[user]:
 						print("Error: unable to find " + _ + " for user " + user)
@@ -138,6 +137,9 @@ def getStats(message, author):
 
 	response = "Here is the requested data: " + statParameter + " stats for " + targetParameter + ".\n"
 	if statParameter != "all":
+		# times vs time
+		if requestedData[targetParameter][statParameter] == 1:
+			response += targetParameter + " has used " + statParameter + " " + str(requestedData[targetParameter][statParameter]) + " time."
 		response += targetParameter + " has used " + statParameter + " " + str(requestedData[targetParameter][statParameter]) + " times."
 	else:
 		response += "```"

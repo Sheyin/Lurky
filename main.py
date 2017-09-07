@@ -29,7 +29,7 @@ async def on_message(message):
 	# Check contents of message
 	if message.content.startswith('!quote '):
 		quote.recordQuote(str(message.author), str(message.content)[7:])
-		utils.updateStats("!quote", message.author)
+		utils.updateStats("!quote", str(message.author))
 		await client.send_message(message.channel, 'Quote has been recorded.')
 	if message.content.startswith('!getquote'):		
 		quoteDict, success = quote.retrieveQuote(str(message.content), str(message.author))
@@ -42,20 +42,20 @@ async def on_message(message):
 			await client.send_message(message.channel, 'Quote: "' + quoteDict['text'] + ' -- ' + quoteDict['name'] + ', (quoted by ' + quoteDict['author'] + '), ' + quoteDict['date'])
 
 	if message.content.startswith('!test') or message.content.startswith('test'):
-		utils.updateStats("!test", message.author)
+		utils.updateStats("!test", str(message.author))
 		await client.send_message(message.channel, 'Working!')
 
 	if message.content.startswith('!tryid'):
 		await client.send_message(message.channel, 'Testing <@' + str(message.author.id) + '>')
 
 	if message.content.startswith('!slap'):
-		response = chatmisc.slap(message.content, str(message.author))
-		utils.updateStats("!slap", message.author)
+		response = chatmisc.slap(message.content, message.author)
+		utils.updateStats("!slap", str(message.author))
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!fish'):
-		response = chatmisc.fish(message.content, str(message.author))
-		utils.updateStats("!fish", message.author)
+		response = chatmisc.fish(message.content, message.author)
+		utils.updateStats("!fish", str(message.author))
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!stats'):
@@ -81,7 +81,51 @@ async def on_message(message):
 				file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
 				file.write("Message: " + "Some emote was used that produces a unicode error." + "\n")
 	
-		response = chatmisc.quickMessageResponse(message.content.lower(), str(message.author.id))
+		if message.content.startswith('surprise'):
+			if message.author.voice_channel:
+				try:
+					voice = await client.join_voice_channel(message.author.voice_channel)
+					player = await voice.create_ytdl_player('https://youtu.be/dQw4w9WgXcQ')
+					player.start()
+					print("Successful?")
+				except:
+					print("Something failed during voice test")
+					print("Is Opus loaded?: " + str(discord.opus.is_loaded()))
+					print(player.error)
+					pass
+			else:
+				await client.send_message(message.channel, 'No surprise for you!')
+
+		elif message.content.startswith('!play '):
+			# Parse url first and see if it is valid
+			splitString = message.content.lower().split(' ')
+			if len(splitString) == 1:
+				await client.send_message(message.channel, 'What do you want to play?  Enter "!play youtube-url-here"')
+			else:
+				if splitString[1][0:4] == 'http':
+					url = splitString[1]
+					if message.author.voice_channel:
+						#try:
+						voice = await client.join_voice_channel(message.author.voice_channel)
+						# Test - from https://github.com/Rapptz/discord.py/issues/315
+						beforeArgs = "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+						#player = await voice.create_ytdl_player(url)
+						player = await voice.create_ytdl_player(url, ytdl_options="--ignore-errors", before_options=beforeArgs)
+						player.start()
+						print("Successful?")
+						'''
+						except:
+							print("Something failed during voice test")
+							print("Is Opus loaded?: " + str(discord.opus.is_loaded()))
+							print("Url tried to play: " + url)
+							pass
+						'''
+					else:
+						await client.send_message(message.channel, 'No surprise for you!')
+				else:
+					await client.send_message(message.channel, "Error: " + str(splitString[1]) + " is not a valid youtube url.")
+
+		response = chatmisc.quickMessageResponse(message.content.lower(), message.author)
 		if response:
 			await client.send_message(message.channel, response)
 		

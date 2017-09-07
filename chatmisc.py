@@ -8,8 +8,9 @@ import utils
 
 statsfile = "stats.txt"
 
-def quickMessageResponse(message, authorID):
+def quickMessageResponse(message, author):
 	response = ""
+	authorID = str(author.id)
 	if greetingCheck(message):
 		response = createTimeResponse(True, authorID)
 
@@ -32,11 +33,11 @@ def quickMessageResponse(message, authorID):
 # Return a True or False if this a greeting to respond to.
 def greetingCheck(message):
 	# Check these for exact matches
-	for _ in ['hello', 'hiya', 'hiyas', 'hey', 'sup', 'helo', 'hola', '/wave', 'morni', 'even', 'good e', 'good m']:
+	for _ in ['hello', 'hiya', 'hiyas', 'helo', 'hola', '/wave', 'morni', 'even', 'good e', 'good m']:
 		if _ in message[:6]:
 			return True
 	# Needs a stricter check than above
-	for _ in ["hi", ":o", "ola"]:
+	for _ in ["hi", ":o", "ola", "sup", "hey"]:
 		if _ in message[:3]:
 			return True
 	return False
@@ -151,6 +152,7 @@ def createTimeResponse(isGreeting, authorID):
 
 
 # Implementation of chibi's old !fish command.  author will be used for tracking usage.
+
 def fish(message, author):
 	# Get content after !fish command
 	splitText = message.split(' ')
@@ -158,8 +160,8 @@ def fish(message, author):
 		appendThis = splitText[1]
 	# No parameter (target) provided
 	else:
-		utils.updateStats("!fish_target", author)
-		message = "Uh, okay.  /me slaps " + author + " with one fish.\n/me slaps " + author + " with two fish.\n/me slaps " + author + " with a red fish.\n/me slaps " + author + " with a blue fish."
+		utils.updateStats("!fish_target", str(author))
+		return "Uh, okay.  /me slaps <@" + str(author.id) + "> with one fish.\n/me slaps " + str(author)[:-5] + " with two fish.\n/me slaps " + str(author)[:-5] + " with a red fish.\n/me slaps " + str(author)[:-5] + " with a blue fish."
 
 	# get userID
 	userID, alias = users.findUserIDAndAlias(appendThis.lower())
@@ -170,7 +172,7 @@ def fish(message, author):
 		message = "Meanie!"
 	elif userID != "unknown":
 		utils.updateStats("!fish_target", userID)
-		message = "/me slaps <@" + userID + "> with one fish.\n/me slaps <@" + userID + "> with two fish.\n/me slaps <@" + userID + "> with a red fish.\n/me slaps <@" + userID + "> with a blue fish."
+		message = "/me slaps " + userID[:-5] + " with one fish.\n/me slaps " + userID[:-5] + " with two fish.\n/me slaps " + userID[:-5] + " with a red fish.\n/me slaps " + userID[:-5] + " with a blue fish."
 	# Unknown target - probably whatever is in appendThis, will be prone to errors.
 	else:
 		message = "/me slaps " + appendThis + " with one fish.\n/me slaps " + appendThis + " with two fish.\n/me slaps " + appendThis + " with a red fish.\n/me slaps " + appendThis + " with a blue fish."
@@ -185,8 +187,10 @@ def slap(message, author):
 		appendThis = splitText[1]
 	# No parameter (target) provided
 	else:
-		utils.updateStats("!fish_target", author)
-		message = "Uh, okay.  /me slaps <@" + author + ">."
+		utils.updateStats("!fish_target", str(author))
+		return "Uh, okay.  /me slaps <@" + str(author.id) + ">."
+		# This does not work - it must be in format <@ numeric-id >
+		#return "Uh, okay.  /me slaps @" + str(author)[:-5] + "."
 
 	# get userID
 	userID, alias = users.findUserIDAndAlias(appendThis.lower())
