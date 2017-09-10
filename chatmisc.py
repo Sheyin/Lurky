@@ -33,10 +33,11 @@ def quickMessageResponse(message, author):
 # Return a True or False if this a greeting to respond to.
 def greetingCheck(message):
 	# Check these for exact matches
-	for _ in ['hello', 'hiya', 'hiyas', 'helo', 'hola', '/wave', 'morni', 'even', 'good e', 'good m']:
+	for _ in ['hello', 'hiya', 'hiyas', 'helo', 'hola', '/wave', 'mornin', 'evenin', 'good e', 'good m']:
 		if _ in message[:6]:
 			return True
 	# Needs a stricter check than above
+	# Consider replacing with a regular expression check to prevent false positives (ex. "Thinking..." triggers this greeting)
 	for _ in ["hi", ":o", "ola", "sup", "hey"]:
 		if _ in message[:3]:
 			return True

@@ -17,11 +17,12 @@ utils.checkInitialization()
 if not discord.opus.is_loaded():
     discord.opus.load_opus('opus')
 
+#async def create_voice_client(self, channel):
+ 	#
+
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
+    print(str(client.user.name) + ' here, reporting for duty!')
     print('------')
 
 @client.event
@@ -81,24 +82,33 @@ async def on_message(message):
 				file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
 				file.write("Message: " + "Some emote was used that produces a unicode error." + "\n")
 	
-		if message.content.startswith('surprise'):
+		if "surprise" in message.content.lower():
 			if message.author.voice_channel:
-				# Try to join if not already in a voice channel.  This is probably not the best handling.
-				try:
+				if not client.is_voice_connected(message.server):
 					voice = await client.join_voice_channel(message.author.voice_channel)
-				except:
-					pass
-				try:
 					player = voice.create_ffmpeg_player('sound/GiveYouUpIntro.mp3')
 					player.start()
-					print("Successful?")
-				except:
-					print("Something failed during voice test")
+					print("Here's a surprise for " + str(message.author)[:-5] + "!")
+				else:
+					voice = await client.is_voice_connected(message.author.voice_channel)
+					player = voice.create_ffmpeg_player('sound/GiveYouUpIntro.mp3')
+					player.start()
+				#else:
+					print("I might be in the wrong channel.")
+					print(str(message.author)[:-5] + " is in " + str(message.author.voice_channel) + " and server " + str(message.server) + ".")
+					#await client.move_to(message.author.voice_channel)
+				#try:
+				#player = voice.create_ffmpeg_player('sound/GiveYouUpIntro.mp3')
+				#player.start()
+				#print("Here's a surprise for " + str(message.author)[:-5] + "!")
+				'''except:
+					print("Something failed during voice test.")
 					print("Is Opus loaded?: " + str(discord.opus.is_loaded()))
-					print(player.error)
+					# Need a custom error handler if you want to display the error
 					pass
+					'''
 			else:
-				await client.send_message(message.channel, 'No surprise for you!')
+				await client.send_message(message.channel, 'I only give surprises to people in voice chat!')
 
 		# This seems to throw errors on a regular basis.  Returns "video does not exist"
 		elif message.content.startswith('!play '):
