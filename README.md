@@ -1,4 +1,4 @@
-# discordbot
+# Lurky
 Experimental discord bot in Python (3.6)
 
 Requires:
