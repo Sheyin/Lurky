@@ -1,5 +1,5 @@
 # Lurky
-Experimental discord bot in Python (3.6)
+Experimental discord bot in Python (3.6).  Created to mimic my old irc bot/scripts and mostly customized to work around my community.
 
 ## Requires:
 1. <a href="https://github.com/Rapptz/discord.py">discord.py</a> 
