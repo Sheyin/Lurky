@@ -16,14 +16,15 @@ Experimental discord bot in Python (3.6)
 
 ## Features:
 - Greets people automatically or responds to parting messages, with different responses based on time
-  -- This has been customized respond to my particular community's greetings.
-  -- Lurky will look at the time, and give a time-appropriate response to the greeting/parting message.  Sometimes he even uses emotes.
+  - This has been customized respond to my particular community's greetings.
+  - Lurky will look at the time, and give a time-appropriate response to the greeting/parting message.  Sometimes he even uses emotes.
+
 - Responds to a several !commands:
--- __!help__ (optional parameter: specific command): Summarizes the available commands.  If a specific command is given, ex. "!help !quote", it will give more detailed information on that command and provide usage information.
---- __!slap__: Causes Lurky to slap a target (in text).
---- __!fish__: A variation of the !slap command, ported from my original IRC script.
---- __!test__: Just tells you "working" if Lurky heard your command - ex. if you are wondering if you lost connection.
---- __!quote__: Records a quote.  Expected input is the copy-pasted input from Discord (including name of speaker, time, and quoted text).
+  - __!help__ (optional parameter: specific command): Summarizes the available commands.  If a specific command is given, ex. "!help !quote", it will give more detailed information on that command and provide usage information.
+   - __!slap__: Causes Lurky to slap a target (in text).
+   - __!fish__: A variation of the !slap command, ported from my original IRC script.
+   - __!test__: Just tells you "working" if Lurky heard your command - ex. if you are wondering if you lost connection.
+   - __!quote__: Records a quote.  Expected input is the copy-pasted input from Discord (including name of speaker, time, and quoted text).
 ---- Quotes are stored locally in JSON format in a text file (quote.txt).  
 ---- If it does not exist, it will be created automatically.
 --- __!getquote__ (optional parameter: name): Retrieves a random quote.  If a name (alias or discord ID) of a person is provided, Lurky will try to retrieve a quote from that person, or else it will pull a random one.
