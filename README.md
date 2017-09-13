@@ -15,8 +15,8 @@ Experimental discord bot in Python (3.6)
 <b>Python main.py</b> or if there are multiple python installations, <b>Python3 main.py</b>.
 
 ## Features:
-### Greets people automatically or responds to parting messages, with different responses based on time
-- This has been customized respond to my particular community's greetings.
+### Greets people automatically or responds to parting messages
+- This has been customized respond to my particular community's greetings. ("hello", "hi", "nn", "bye", etc)
 - Lurky will look at the time, and give a time-appropriate response to the greeting/parting message.  Sometimes he even uses emotes.
 ### Responds to a several !commands:
 - __!help__ (optional parameter: specific command): Summarizes the available commands.  If a specific command is given, ex. "!help !quote", it will give more detailed information on that command and provide usage information.
