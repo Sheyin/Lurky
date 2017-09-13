@@ -2,7 +2,9 @@
 Experimental discord bot in Python (3.6)
 
 Requires:
-<br><a href="https://github.com/Rapptz/discord.py">discord.py</a> - install with <b>pip install discord.py</b>  * Note that as of 8/31/17 there may be an error running this on mac.*
+<br><a href="https://github.com/Rapptz/discord.py">discord.py</a> 
+- install with <b>pip install discord.py</b>  
+- Note that as of 8/31/17 there may be an error running this on macOS.
 <br>secret.py (a config file - need to create something to auto-populate this)
 - This contains private info such as the token required by discord.
 - generate a python module with "token = (your token from discord)".
