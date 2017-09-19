@@ -10,42 +10,43 @@ statsfile = "stats.txt"
 
 def quickMessageResponse(message, author):
 	response = ""
-	authorID = str(author.id)
+	authorID = str(author.id).lower()
 	if greetingCheck(message):
 		response = createTimeResponse(True, authorID)
 
 	if partingCheck(message):
 		response = createTimeResponse(False, authorID)
 
-	for _ in ["why lurky", "why are you named lurky", "who's lurky", "who is lurky"]:
+	for _ in ["why lurky", "why are you named lurky", "who's lurky", "who is lurky", "what are you?"]:
 		if _ in message:
 			response = "I am a bot written in Python3 for the express purpose of entertaining some people and annoying the rest."
 
 	if "what is love" in message:
 		response = "Baby don't hurt me... don't hurt me... no more..."
 
-	for _ in ["give you up", "let you down", "run around", "desert you"]:
+	for _ in ["give you up", "let you down", "run around", "desert you", "rickroll"]:
 		if _ in message:
 			response =  "Never gonna:\n```- give you up\n- let you down\n- run around\n- desert you\n```"
 
 	return response
 
 # Return a True or False if this a greeting to respond to.
+# Replace with regular expressions - probably
 def greetingCheck(message):
 	# Check these for exact matches
-	for _ in ['hello', 'hiya', 'hiyas', 'helo', 'hola', '/wave', 'mornin', 'evenin', 'good e', 'good m']:
+	for _ in ['hello', 'hiya', 'helo', 'hola', '/wave', 'mornin', 'evenin', 'good e', 'good m']:
 		if _ in message[:6]:
 			return True
 	# Needs a stricter check than above
 	# Consider replacing with a regular expression check to prevent false positives (ex. "Thinking..." triggers this greeting)
-	for _ in ["hi", ":o", "ola", "sup", "hey"]:
+	for _ in ["hi ", ":o", "ola", "sup", "hey"]:
 		if _ in message[:3]:
 			return True
 	return False
 
 # Return True or False if this is a greeting to respond to.
 def partingCheck(message):
-	for _ in ["bye", "see 'ya", "later", "night", "g'night", "g'nite", "nite", "laters"]:
+	for _ in ["bye", "see 'ya", "later", "night", "g'night", "g'nite", "nite", "laters", "good ni"]:
 		if _ in message[:7]:
 			return True
 	# Needs a stricter check than above
