@@ -5,6 +5,7 @@ import datetime
 import random
 import users
 import utils
+import re
 
 statsfile = "stats.txt"
 
@@ -31,27 +32,38 @@ def quickMessageResponse(message, author):
 	return response
 
 # Return a True or False if this a greeting to respond to.
-# Replace with regular expressions - probably
 def greetingCheck(message):
-	# Check these for exact matches
-	for _ in ['hello', 'hiya', 'helo', 'hola', '/wave', 'mornin', 'evenin', 'good e', 'good m']:
-		if _ in message[:6]:
+	greetingWords = ['hello', 'hiya', 'helo', 'hola', '/wave', 'morn', 'evenin', 'howdy', 'salutations', 
+		'greetings', 'salut', 'bonsoir', 'moshi', 'konnichiwa', 'ohayo', 'hi', ':o', 'ola', 'sup', 'hey', 
+		'hia', 'nihao', 'bonjour', 'hallo', 'guten tag', 'namaste', 'salaam', 'hei', 'hai', 'aloha', 
+		'annyong', 'oi', 'salut']
+	for word in greetingWords:
+		searchTerm = '\W*' + word + '\W*'
+
+		if re.search(searchTerm, message):
+			print ("match: " + str(re.search(searchTerm, message)))
 			return True
-	# Needs a stricter check than above
-	# Consider replacing with a regular expression check to prevent false positives (ex. "Thinking..." triggers this greeting)
-	for _ in ["hi ", ":o", "ola", "sup", "hey"]:
-		if _ in message[:3]:
-			return True
+
 	return False
 
 # Return True or False if this is a greeting to respond to.
 def partingCheck(message):
-	for _ in ["bye", "see 'ya", "later", "night", "g'night", "g'nite", "nite", "laters", "good ni"]:
-		if _ in message[:7]:
+	partingWords = ["bye", "see 'ya", "g'night", "g'nite", "nite", "laters", "good night", "goodnight", "nn", "ja", "gn", "take care"]
+
+	for word in partingWords:
+		searchTerm = '\W*' + word + '\W*'
+		match = re.search(searchTerm, message)
+
+		if match:
 			return True
-	# Needs a stricter check than above
-	for _ in ["nn", "ja", "gn"]:
-		if _ in message[:2]:
+
+	# These words are too common to have the same regular expression
+	beginningCheck = ['night', 'later']
+	for word in beginningCheck:
+		searchTerm = '\A' + word + '\W*'
+		match = re.search(searchTerm, message)
+
+		if match:
 			return True
 
 	return False
@@ -144,7 +156,7 @@ def createTimeResponse(isGreeting, authorID):
 		if time == "night":
 			message = random.choice(nightPartingMessages)
 			if useEmote:
-				message += " " + random.choice(nightpartingEmotes)
+				message += " " + random.choice(nightPartingEmotes)
 		else:
 			message = random.choice(dayPartingMessages)
 			if useEmote:

@@ -28,6 +28,9 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	# Check contents of message
+	if users.findUserAlias(str(message.author)) == "teague" and "lurkey" in str(message.content).lower():
+		response = teague.chat(message.content)
+		await client.send_message(message.channel, response)
 	if message.content.startswith('!quote '):
 		quote.recordQuote(str(message.author), str(message.content)[7:])
 		utils.updateStats("!quote", str(message.author))
