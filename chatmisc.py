@@ -48,7 +48,7 @@ def greetingCheck(message):
 
 # Return True or False if this is a greeting to respond to.
 def partingCheck(message):
-	partingWords = ["bye", "see 'ya", "g'night", "g'nite", "nite", "laters", "good night", "goodnight", "nn", "ja", "gn", "take care"]
+	partingWords = ["bye", "see 'ya", "g'night", "g'nite", "laters", "good night", "goodnight", "nn", "ja", "gn", "take care"]
 
 	for word in partingWords:
 		searchTerm = '\W*' + word + '\W*'
@@ -58,7 +58,7 @@ def partingCheck(message):
 			return True
 
 	# These words are too common to have the same regular expression
-	beginningCheck = ['night', 'later']
+	beginningCheck = ['night', 'later', 'nite']
 	for word in beginningCheck:
 		searchTerm = '\A' + word + '\W*'
 		match = re.search(searchTerm, message)
