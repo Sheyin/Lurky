@@ -25,6 +25,8 @@ statsfile = "stats.txt"	# note that this is doubly declared in chatsmisc.py - sh
 # Keeping track of random command usage statistics.
 # A file check should be performed when Lurky starts, so this should generally succeed.
 def updateStats(stat, userID):
+	# Fix stats to deal with entries not in the file better
+
 	try:
 		with open(statsfile, "r") as f:
 			statsDict = json.load(f)
@@ -40,6 +42,7 @@ def updateStats(stat, userID):
 	# Stats file does not exist or the dictionary is missing that entry
 	except (IOError, json.decoder.JSONDecodeError) as error:
 		print("Error: unable to update " + stat + ".  Restart Lurky.")
+
 
 
 

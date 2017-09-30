@@ -31,42 +31,67 @@ def quickMessageResponse(message, author):
 
 	return response
 
+# Tested extensively using https://regex101.com/
 # Return a True or False if this a greeting to respond to.
 def greetingCheck(message):
-	greetingWords = ['hello', 'hiya', 'helo', 'hola', '/wave', 'morn', 'evenin', 'howdy', 'salutations', 
-		'greetings', 'salut', 'bonsoir', 'moshi', 'konnichiwa', 'ohayo', 'hi', ':o', 'ola', 'sup', 'hey', 
-		'hia', 'nihao', 'bonjour', 'hallo', 'guten tag', 'namaste', 'salaam', 'hei', 'hai', 'aloha', 
-		'annyong', 'oi', 'salut']
+	greetingWords = ['hello', 'hiya', 'helo', 'hola', '/wave', 'howdy', 'salutations', 
+		'greetings', 'salut', 'bonsoir', 'moshi', 'konnichiwa', 'ohayo', ':o', 
+		'nihao', 'bonjour', 'hallo', 'guten tag', 'namaste', 'salaam', 'aloha', 
+		'annyong', 'salut', 'hi', 'oi', 'sup', 'hey', 'ola', 'hia', 'hai', 'hei']
 	for word in greetingWords:
-		searchTerm = '\W*' + word + '\W*'
+		searchTerm = '[ ]+' + word + '[^a-z0-9]+|[ ]+' + word + '$|^' + word + '[^a-z0-9.]|^' + word + '$'
 
-		if re.search(searchTerm, message):
-			print ("match: " + str(re.search(searchTerm, message)))
+		match = re.search(searchTerm, message)
+		if match:
+			print ("greetingWords match: " + str(match.group(0)))
+			print ("Original message: " + message)
+			return True
+
+	# These words are too common to have the same regular expression
+	beginningCheck = ['evenin', 'morning', 'evening']
+	for word in beginningCheck:
+
+		searchTerm = '^' + word + '[\n \0 ,?!`~]+|^' + word + '$'
+		match = re.search(searchTerm, message)
+
+		if match:
+			print ("beginningCheck match: " + str(match.group(0)))
+			print ("Original message: " + message)
 			return True
 
 	return False
 
 # Return True or False if this is a greeting to respond to.
 def partingCheck(message):
-	partingWords = ["bye", "see 'ya", "g'night", "g'nite", "laters", "good night", "goodnight", "nn", "ja", "gn", "take care"]
+	partingWords = ["bye", "see 'ya", "g'night", "g'nite", "laters", "good night", "goodnight", 
+			"nn", "ja", "gn", "take care", "nite"]
 
 	for word in partingWords:
-		searchTerm = '\W*' + word + '\W*'
+		searchTerm = '[ ]+' + word + '[^a-z0-9]+|[ ]+' + word + '$|^' + word + '[^a-z0-9.]|^' + word + '$'
 		match = re.search(searchTerm, message)
 
 		if match:
+			print("partingCheck match: " + str(match.group(0)))
+			print ("Original message: " + message)
 			return True
 
 	# These words are too common to have the same regular expression
-	beginningCheck = ['night', 'later', 'nite']
-	for word in beginningCheck:
-		searchTerm = '\A' + word + '\W*'
+	beginningPartingCheck = ['night', 'later']
+	for word in beginningPartingCheck:
+		searchTerm = '^' + word + '[\n \0 ,?!`~]+|^' + word + '$'
 		match = re.search(searchTerm, message)
 
 		if match:
+			print("beginningPartingCheck match: " + str(match.group(0)))
+			print ("Original message: " + message)
 			return True
 
 	return False
+
+
+# Abstract the match into here to lessen code repetition, after debugging
+def regexCheck(message, word, type):
+	pass
 
 
 # This checks if it is morning / afternoon / day for specific greetings.
