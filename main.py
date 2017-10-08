@@ -47,18 +47,19 @@ async def on_message(message):
 
 	if message.content.startswith('!test') or message.content.startswith('test'):
 		utils.updateStats("!test", str(message.author))
-		await client.send_message(message.channel, 'Working!')
+		response = chatmisc.test(message.author)
+		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!tryid'):
 		await client.send_message(message.channel, 'Testing <@' + str(message.author.id) + '>')
 
 	if message.content.startswith('!slap'):
-		response = chatmisc.slap(message.content, message.author)
+		response = chatmisc.slap(message.content.lower(), str(message.author))
 		utils.updateStats("!slap", str(message.author))
 		await client.send_message(message.channel, response)
 
 	if message.content.startswith('!fish'):
-		response = chatmisc.fish(message.content, message.author)
+		response = chatmisc.fish(message.content.lower(), str(message.author))
 		utils.updateStats("!fish", str(message.author))
 		await client.send_message(message.channel, response)
 

@@ -206,6 +206,7 @@ def fish(message, author):
 	userID, alias = users.findUserIDAndAlias(appendThis.lower())
 	appendThisFragments = appendThis.split(alias)
 
+	# TODO: May want to make !fish and !slap implementation identical
 	if users.findUserAlias(userID) in ["sheyin", "lurky"]:
 		utils.updateStats("!fish_target", userID)
 		message = "Meanie!"
@@ -236,14 +237,14 @@ def slap(message, author):
 	appendThisFragments = appendThis.split(alias)
 
 	if users.findUserAlias(userID) in ["Sheyin", "Lurky"]:
-		utils.updateStats("!fish_target", userID)
+		utils.updateStats("!fish_target", alias)
 		message = "Meanie!"
 	elif users.findUserAlias(userID) == "Brandon":
 		utils.updateStats("!fish_target", userID)
-		message = "Meanie!\n/me slaps <@" + userID + ">"+ appendThisFragments[1] + "."
+		message = "Meanie!\n/me slaps " + alias + appendThisFragments[1] + "."
 	elif userID != "unknown":
 		utils.updateStats("!fish_target", userID)
-		message = "/me slaps <@" + userID + ">"+ appendThisFragments[1] + "."
+		message = "/me slaps " + alias + appendThisFragments[1] + "."
 	# Unknown target - probably whatever is in appendThis, will be prone to errors.
 	else:
 		message = "/me slaps " + appendThis
@@ -271,6 +272,21 @@ def help(text):
 	else:
 		return "Sorry, I don't know anything about " + splitText[1] + "!"
 
+# The quick response, but will also respond with voice state etc
+def test(author):
+	response = "Working!"
+	if author.voice.self_mute:
+		response += " You are self-muted."
+	if author.voice.self_deaf:
+		response += " You are self-deafened."
+	if "afk" in str(author.voice.voice_channel).lower():
+		response += " You are in the #afk voice channel."
+	if author.voice.mute:
+		response += " You have been muted by the server."
+	if author.voice.deaf:
+		response += " You have been deafened by the server."
+	print (str(author.name) + " is in the " + str(author.voice.voice_channel) + ".")
+	return response
 
 
 	
