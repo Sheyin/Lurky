@@ -22,7 +22,7 @@ Experimental discord bot in Python (3.6).  Created to mimic my old irc bot/scrip
 - __!help__ (optional parameter: specific command): Summarizes the available commands.  If a specific command is given, ex. "!help !quote", it will give more detailed information on that command and provide usage information.
 - __!slap__: Causes Lurky to slap a target (in text).
 - __!fish__: A variation of the !slap command, ported from my original IRC script.
-- __!test__: Just tells you "working" if Lurky heard your command - ex. if you are wondering if you lost connection.
+- __!test or test__: Just tells you "working" if Lurky heard your command - ex. if you are wondering if you lost connection.  He will also respond with additional information if the user invoking the command is in a voice channel - ex. if you are self-muted, or in an afk channel, unaware.
 - __!quote__: Records a quote.  Expected input is the copy-pasted input from Discord (including name of speaker, time, and quoted text).
   - Quotes are stored locally in JSON format in a text file (quote.txt).  
   - If it does not exist, it will be created automatically.
