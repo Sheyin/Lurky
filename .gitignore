@@ -4,6 +4,7 @@
 ############
 secret.py
 /reference
+/.aws
 
 # Compiled source #
 ###################
