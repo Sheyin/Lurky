@@ -11,7 +11,7 @@ client = boto3.client('lex-runtime')
 userId = "Speaker"
 
 
-test_message = "Hey Lurky"
+test_message = "How are you today Lurky"
 
 # See documentation for full explanation of parameters
 response = client.post_content(
