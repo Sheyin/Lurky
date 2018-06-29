@@ -5,6 +5,19 @@
 secret.py
 /reference
 /.aws
+log.txt
+GiveYouUpIntro.aup
+GiveYouUpIntro_data
+quote.txt
+/.vs
+result.txt
+/sound
+settingsfile.txt
+stats.txt
+weather_json_notes.py
+quoteSettings.txt
+media.py
+
 
 # Compiled source #
 ###################
