@@ -8,6 +8,8 @@ import quote
 import chatmisc
 import datetime
 import utils
+from fortnite import getFortniteAlerts
+from currency import identifyCurrency, convertCurrency
 
 client = discord.Client()
 # This checks for and creates a stats file if it does not exist
@@ -35,7 +37,7 @@ async def on_message(message):
 		quote.recordQuote(str(message.author), str(message.content)[7:])
 		utils.updateStats("!quote", str(message.author))
 		await client.send_message(message.channel, 'Quote has been recorded.')
-	if message.content.startswith('!getquote'):		
+	if message.content.startswith('!getquote'):
 		quoteDict, success = quote.retrieveQuote(str(message.content), str(message.author))
 		utils.updateStats("!getquote", str(message.author))
 		if quoteDict == "empty":
@@ -71,11 +73,15 @@ async def on_message(message):
 		response = chatmisc.help(message.content.lower())
 		await client.send_message(message.channel, response)
 
+	if message.content.startswith('!alert') or message.content.startswith('!fortnite'):
+		response = getFortniteAlerts()
+		await client.send_message(message.channel, response)
+
 	if message.content.startswith('Lurky?'):
 		await client.send_message(message.channel, 'Yes?')
-		
+
 	# So it doesn't respond to itself
-	elif message.author.id != message.server.me.id:
+	elif message.channel.is_private or message.author.id != message.server.me.id:
 		# Logging just because
 		try:
 			with open("log.txt", "a") as file:
@@ -85,7 +91,7 @@ async def on_message(message):
 			with open("log.txt", "a") as file:
 				file.write("Author: " + str(message.author) + " ID:" + str(message.author.id) + " Date: " + datetime.datetime.today().strftime("%d/%m/%y %H:%M") + "\n")
 				file.write("Message: " + "Some emote was used that produces a unicode error." + "\n")
-	
+
 		if "surprise" in message.content.lower():
 			if message.author.voice_channel:
 				if not client.is_voice_connected(message.server):
@@ -113,6 +119,12 @@ async def on_message(message):
 					'''
 			else:
 				await client.send_message(message.channel, 'I only give surprises to people in voice chat!')
+
+		# Listening for currency conversion, particularly jpy -> usd.
+		elif message.content.startswith('!convert ') or any(char.isdigit() for char in message.content):
+			amount = identifyCurrency(message.content.lower())
+			if amount:
+				await client.send_message(message.channel, convertCurrency(amount, 'JPY'))
 
 		# This seems to throw errors on a regular basis.  Returns "video does not exist"
 		elif message.content.startswith('!play '):
@@ -148,7 +160,7 @@ async def on_message(message):
 		response = chatmisc.quickMessageResponse(message.content.lower(), message.author)
 		if response:
 			await client.send_message(message.channel, response)
-		
+
 	else:
 		# Not needed - probably only something Lurky says.
 		print("Lurky says: " + message.content)
