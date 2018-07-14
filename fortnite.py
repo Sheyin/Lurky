@@ -60,28 +60,38 @@ def getFortniteData():
 
 # Figure out the category (mission type) from a bit of string
 def getMissionType(text):
+	missionType = ""
+	# This checks for group mission and appends on to text to return.
+	# Seperate check from mission type.
+	if 'group' in text:
+		missionType += "(Group) "
+
+	# Get mission type
 	if 'repair' in text:
-		return "Repair the Shelter"
+		missionType += "Repair the Shelter"
 	elif 'evacuate' in text:
-		return "Evacuate the Shelter"
+		missionType += "Evacuate the Shelter"
 	elif 'bomb' in text:
-		return "Deliver the Bomb"
+		missionType += "Deliver the Bomb"
 	elif 'retrieve' in text:
-		return "Retrieve the Data"
+		missionType += "Retrieve the Data"
+	elif 'lightning' in text:
+		missionType += "Ride the Lightning"
 	elif 'fight' in text:
-		return "Category 1 Storm / Fight the Storm"
+		missionType += "Category 1 Storm / Fight the Storm"
 	elif 'category-2' in text:
-		return "Category 2 Storm"
+		missionType += "Category 2 Storm"
 	elif 'category-3' in text:
-		return "Category 3 Storm"
+		missionType += "Category 3 Storm"
 	elif 'category-4' in text:
-		return "Category 4 Storm"
+		missionType += "Category 4 Storm"
 	elif 'rocket' in text:
-		return "Launch the Rocket"
+		missionType += "Launch the Rocket"
 	elif 'servers' in text:
-		return "Protect the Servers"
+		missionType += "Protect the Servers"
 	else:
-		return "Unknown mission type"
+		missionType += "Unknown mission type"
+	return missionType
 
 # Prints the list of results
 def printResults(results):
